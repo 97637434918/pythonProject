@@ -1,6 +1,3 @@
 # pythonProject
 
-asdsadfasdf
-
-asdfasdfasdfg
-![Figure_1](https://user-images.githubusercontent.com/91728627/192729555-5677ff71-3a77-4142-abb7-e0dad6bbe68e.png)
+西安交通大学《综合集成思维与方法》课程，非线性系统示例代码
