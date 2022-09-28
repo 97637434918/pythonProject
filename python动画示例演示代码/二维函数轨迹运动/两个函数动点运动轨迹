@@ -1,0 +1,51 @@
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+
+fig, ax = plt.subplots()
+
+x = np.arange(0, 2.25*np.pi, 0.1)
+line, = ax.plot(x, np.sin(x), color='blue')
+
+ax2 = ax.twinx()           # 让2个子图的x轴一样，同时创建副坐标轴
+x2 = np.array(list(reversed(x)))
+line2, = ax2.plot(x2, np.sin(x2+2**np.pi), color='green')
+
+sin = True
+
+
+def animate(i):
+    # update the data.
+    # 如果你打印一下i,就能明白为什么要设置为2
+    global sin, x
+    if sin:
+        if len(ax.lines) == 2:
+            ax.lines.pop(1)
+        # List 的 pop 方法默认删除最后一个元素, 但是我们要删除的是上一个存在的
+        if len(ax.texts) > 0:
+            ax.texts.pop(0)
+        ax.plot(x[i], np.sin(x)[i], 'o', color='red')
+        ax.text(x[i], np.sin(x)[i], ' (' + str(round(x[i], 2)) + ',' + str(round(np.sin(x)[i], 2)) + '+)', fontsize=10)
+        print(x[i])  # 通过打印查看下面if的判断条件
+        if x[i] >= 7.0:  # 这个判断条件看精度和区间长度而定，对应2.25*np.pi和0.1
+            sin = False
+            ax.lines.pop()
+            ax.texts.pop()
+    else:
+        if len(ax2.lines) == 2:
+            ax2.lines.pop(1)
+        # List 的 pop 方法默认删除最后一个元素, 但是我们要删除的是上一个存在的
+        if len(ax2.texts) > 0:
+            ax2.texts.pop(0)
+        ax2.plot(x2[i], np.sin(x2+2**np.pi)[i], 'o', color='red')
+        ax2.text(x2[i], np.sin(x2+2**np.pi)[i], ' (' + str(round(x2[i], 2)) + ',' + str(round(np.sin(x2+2**np.pi)[i], 2)) + '+)', fontsize=10)
+        if x2[i] <= 0:
+            sin = True
+            ax2.lines.pop()
+            ax2.texts.pop()
+    return line, ax, line2, ax2
+
+
+ani = animation.FuncAnimation(
+    fig, animate, frames=x.size, interval=100, blit=False, save_count=50)
+plt.show()
